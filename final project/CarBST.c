@@ -116,7 +116,6 @@ void chargeCar(StationBST** stationBST, CarBST* carBST) {
 			assignCar2port(car, port);
 		}
 		else {
-			car->totalPayed += minutesBetween(car->pPort->tin) * 1.2;
 			enqueueCar(station->carQueue, car);
 			car->inqueue = 1;
 			station->nCars++;

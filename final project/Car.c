@@ -53,12 +53,12 @@ void enqueueCar(qCar* q, Car* car) {
 
 Car* dequeue(qCar* q) {
 	if (isEmptyCar(q)){
-		return NULL;  // Can't dequeue from empty queue
+		return NULL;               // Can't dequeue from empty queue
 	}
 	Car* car = q->front->car;      // Save the car to return
 	carNode* node2Del = q->front;
-	q->front = q->front->next;
-	free(node2Del);
+	q->front = q->front->next;     // Move front pointer forward
+	free(node2Del);                // Free old front node
 	return car;
 }
 
@@ -68,18 +68,18 @@ Car* dequeue(qCar* q) {
 	 carNode* curr = q->front;
 	 carNode* prev = NULL;
 	 while (curr) {
-		 if (curr->car == car) {
+		 if (curr->car == car) {          // Found the car in the queue
 			 if (prev == NULL) {
-				 q->front = curr->next;
+				 q->front = curr->next;   // Removing first element
 			 }
 			 else {
-				 prev->next = curr->next;
+				 prev->next = curr->next; // Skip over the current node
 			 }
 			 if (curr == q->rear) {
-				 q->rear = prev;
+				 q->rear = prev;          // If it was last element, update rear pointer
 			 }
-			 curr->car->inqueue = 0;
-			 free(curr);
+			 curr->car->inqueue = 0;      // Mark as no longer in queue
+			 free(curr);                  // Free the node
 			 return;
 		 }
 		 prev = curr;
@@ -91,27 +91,28 @@ carNode* searchInCarQ(qCar* q,char lic[9]) {
 	carNode* node = q->front;
     while(node){
 		if(strcmp(node->car->nLicense,lic) == 0) {
-			return node;
+			return node;          // Return pointer to node if license matches
 		}
 			node = node->next;
 	}
-	return node;
+	return node;                  // NULL if not found
 }
 
 Car* searchCarByPortType(qCar* q,PortType pt){
 	carNode* node = q->front;
 	while (node) {
 		if (node->car->portType == pt) {
-			return node->car;
+			return node->car;   // Return first car with matching port type
 		}
 		node = node->next;
 	}
-	return NULL;
+	return NULL;                // No match found
 }
 
 int CarsInFront(qCar* q, Car* car){
 	int count = 0;
 	carNode* node = q->front;
+	// Count cars in front with the same port type until we reach the target car
 	while(strcmp(car->nLicense,node->car->nLicense) != 0){
 		if(car->portType == node->car->portType){
 			count++;
@@ -122,16 +123,6 @@ int CarsInFront(qCar* q, Car* car){
 }
 
 void assignCar2port(Car* car, Port* port) {
-	if (car->pPort) {
-		car->pPort->p2car = NULL;
-		car->pPort->status = 2;
-		car->totalPayed += minutesBetween(car->pPort->tin) * 1.2;
-		car->pPort->tin.Year = 0;
-		car->pPort->tin.Month = 0;
-		car->pPort->tin.Day = 0;
-		car->pPort->tin.Hour = 0;
-		car->pPort->tin.Min = 0;
-	}
 	port->p2car = car;
 	port->status = 1;
 	car->pPort = port;
