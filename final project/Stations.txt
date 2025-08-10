@@ -1,0 +1,7 @@
+ID,StationName,NumOfPorts,CoordX,CoordY
+101,Tel Aviv Center,4,32.090000,34.780000
+205,Haifa Port,3,32.790000,34.990000
+307,Beer Sheva North,5,31.250000,34.790000
+412,Jerusalem East,2,31.770000,35.210000
+518,Herzliya Marina,6,32.160000,34.810000
+623,Ashdod South,4,31.800000,34.640000

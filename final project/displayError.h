@@ -1,0 +1,10 @@
+#pragma once
+
+
+// TYPE ERROR: 100 {EXPECTED INTEGER: 101, EXPECTED DOUBLE: 102, EXPECTED CHAR: 103}
+// VALUE ERROR: 200 {IMPROPER LICENSE: 201}
+// MALLOC ERROR: 300
+// FILE ERROR: 400
+// NOT FOUND: 404
+// (int errorCode)
+void displayError(int errorCode);
