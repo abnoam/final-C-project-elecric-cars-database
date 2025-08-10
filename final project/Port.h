@@ -71,4 +71,7 @@ int minutesBetween(Date inputDate);
 // (Port* head)
 void printPorts(Port* head);
 
+// Prints the details of a single port
+// Displays port number, type, status, and if occupied – the car license and charging start time
+// (Port* port)
 void printPort(Port* port);

@@ -64,16 +64,33 @@ void checkCarStatus(StationBST* stationBST, CarBST* carBST);
 // (StationBST* stationBST, CarBST* carBST)
 void stopCharge(StationBST* stationBST, CarBST* carBST);
 
+// Prints the top customer details
+// (Car* carList[5])
 void printTopCustumer(Car* carList[5]);
 
+// Traverses the tree to find top customers
+// Updates the given car list with the highest-paying customers
+// (tCar* root, Car* carList[5])
 void findTopCustumers(tCar* root, Car* carList[5]);
 
+// Displays the top customers
+// (CarBST* cBST)
 void dispTopCustomers(CarBST* cBST);
 
+// Finds the node with the minimum license number in the tree
+// Returns pointer to that node
+// (tCar* node)
 tCar* findMinTcar(tCar* node);
 
+// Removes a car from the tree by license number
+// Returns the updated root of the tree
+// (tCar* root, char nLicense[9])
 tCar* removeCar(tCar* root, char nLicense[9]);
 
+// Removes a customer if they are not in queue or charging
+// (CarBST* cBST)
 void remCustomer(CarBST* cBST);
 
+// Frees all nodes and cars in the tree
+// (tCar* root)
 void freeAllCar(tCar* root);

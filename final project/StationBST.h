@@ -84,27 +84,60 @@ void dispAllSt(StationBST* stationBST);
 // (StationBST* sBST)
 void dispCarsAtSt(StationBST* sBST);
 
+// Prompts the user to select a station by name or ID
+// Returns a pointer to the selected station, or NULL if not found
+// (StationBST* sBST)
 Station* stationInput(StationBST* sBST);
 
+// Generates and displays a status report for station
+// (StationBST* sBST)
 void reportStStat(StationBST* sBST);
 
+// Adds a new port to a specified station
+// (StationBST* sBST)
 void addNewPort(StationBST* sBST);
 
+// Prompts user to input a station ID and returns the matching station
+// Returns NULL if station is not found
+// (StationBST* sBST)
 Station* stationInputByID(StationBST* sBST);
 
+// Releases all currently occupied for over 10 hours ports in all stations
+// (StationBST* sBST)
 void releasePorts(StationBST* sBST);
 
+// Removes all ports marked as out of order from all stations
+// (StationBST* sBST)
 void remOutOrderPort(StationBST* sBST);
 
+// Closes a station and removes it from the BST
+// Frees all allocated memory for that station
+// (StationBST* sBST)
 void closeSt(StationBST* sBST);
 
+// Finds the station with the minimum ID in a subtree
+// Returns a pointer to that station
+// (Station* node)
 Station* findMinStation(Station* node);
 
+// Removes a station by ID from the BST
+// Returns the updated root node
+// (Station* root, int ID)
 Station* removeStation(Station* root, int ID);
 
+// Frees memory allocated for all ports in a station
+// (Station* station)
 void freePortsInStation(Station* station);
 
+// Frees memory allocated for the car queue in a station
+// (Station* station)
 void freeCarQ(Station* station);
 
+// Searches for a station containing a specific car license
+// Returns a pointer to that station if found, otherwise NULL
+// (Station* root, char lic[9])
 Station* findStation(Station* root, char lic[9]);
+
+// Frees all memory for all stations in the BST
+// (Station* root)
 void freeAllStations(Station* root);

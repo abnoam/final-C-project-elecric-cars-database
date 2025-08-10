@@ -10,44 +10,52 @@
 
 qCar* initQCar() {
 	qCar* q = (qCar*)malloc(sizeof(qCar));
-	if (!q) { displayError(300); return NULL; }
-	q->front = NULL;
+	if (!q) {
+		displayError(300); // Allocation failed - no memory available
+		return NULL;
+	}
+	q->front = NULL; // Initially the queue is empty
 	q->rear = NULL;
 	return q;
 }
 Car* createCar(char* nLicense, PortType portType, double totalPayed, Port* pPort, int inqueue) {
 	Car* car = (Car*)malloc(sizeof(Car));
 	if (!car) { displayError(300); return NULL; }
-	strcpy(car->nLicense, nLicense);
-	car->portType = portType;
-	car->totalPayed = totalPayed;
-	car->pPort = pPort;
-	car->inqueue = inqueue;
+	strcpy(car->nLicense, nLicense); // Copy license plate string
+	car->portType = portType;        // Charging port type required
+	car->totalPayed = totalPayed;    // Total amount paid so far
+	car->pPort = pPort;              // Pointer to port currently assigned (NULL if none)
+	car->inqueue = inqueue;          // 1 if in queue 0 if not
 	return car;
 }
 
 int isEmptyCar(qCar* q) {
+	// If front is NULL, the queue is empty
 	return (q->front) ? 0 : 1;
 }
-void enqueueCar(qCar* q,Car* car) {
+void enqueueCar(qCar* q, Car* car) {
 	carNode* carnode = (carNode*)malloc(sizeof(carNode));
 	if (!carnode) { displayError(300); return; }
 	carnode->car = car;
 	carnode->next = NULL;
+	// Prevent adding duplicates based on license plate
 	if (!searchInCarQ(q, car->nLicense)) {
-		if (isEmptyCar(q))
-			q->front = carnode;
-		else
-			q->rear->next = carnode;
-		q->rear = carnode;
+		if (isEmptyCar(q)) {
+			q->front = carnode;      // First car in the queue
+		}
+		else {
+			q->rear->next = carnode; // Append to the end
+		}
+		q->rear = carnode;           // Update rear pointer
 	}
 
 }
 
- Car* dequeue(qCar* q) {
-	if (isEmptyCar(q))
-		return NULL;
-	Car* car = q->front->car;
+Car* dequeue(qCar* q) {
+	if (isEmptyCar(q)){
+		return NULL;  // Can't dequeue from empty queue
+	}
+	Car* car = q->front->car;      // Save the car to return
 	carNode* node2Del = q->front;
 	q->front = q->front->next;
 	free(node2Del);
