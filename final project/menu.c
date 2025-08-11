@@ -112,6 +112,7 @@ void runMenu()
 				break;
 			case 13:
 				closeSt(sBST);
+				//printf("No customers\n");
 				break;
 			default:
 				break;
@@ -123,6 +124,9 @@ void runMenu()
 				system("cls");
 				showMenu = 1;
 				option = NULL;
+			}
+			else {
+				printf(YELLOW"Press any key to exit\n"WHITE);
 			}
 		}
 	}

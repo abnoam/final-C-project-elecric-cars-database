@@ -123,10 +123,11 @@ int CarsInFront(qCar* q, Car* car){
 }
 
 void assignCar2port(Car* car, Port* port) {
+	// Assign car to the new port
 	port->p2car = car;
-	port->status = 1;
-	car->pPort = port;
-	time_t now = time(NULL);
+	port->status = 1;        // Mark port status "in use"
+	car->pPort = port;       // Link car to port
+	time_t now = time(NULL); // Record start charging time
 	struct tm* t = localtime(&now);
 	port->tin.Year = t->tm_year + 1900;
 	port->tin.Month = t->tm_mon + 1;
@@ -140,25 +141,27 @@ void carLicenseInput(char* lic) {
 	char carLicense[9], checkInput;
 	int digitCount = 0;
 	printf("Please enter car license: ");
+	// Check for exactly 8 chars and that the user pressed enter after input
 	if (scanf("%8s%c", carLicense, &checkInput) != 2 || checkInput != '\n' || strlen(carLicense) != 8) {
 		while (checkInput != '\n' && getchar() != '\n');
-		displayError(201);
+		displayError(201); // Invalid license format
 		strcpy(lic, "\0");
 		return;
 	}
 
 	else {
+		// Count digits in the input to ensure it's fully numeric
 		for (int i = 0; i < strlen(carLicense); i++) {
 			if (isdigit(carLicense[i])) {
 				digitCount++;
 			}
 		}
-		if (digitCount == 8) {
+		if (digitCount == 8) { // All 8 characters are digits
 			strcpy(lic, carLicense);
 			return;
 		}
 		else {
-			displayError(201);
+			displayError(201); // License must be numeric
 			strcpy(lic, "\0");
 			return;
 		}
@@ -166,7 +169,7 @@ void carLicenseInput(char* lic) {
 }
 
 void printCarLic(Car* car){
-	printf("%s\n", car->nLicense);
+	printf("%s\n", car->nLicense); //prints the car license
 }
 
 void printCarsInQ(qCar* q) {
@@ -189,7 +192,7 @@ void printCarsInQ(qCar* q) {
 void printCarsInPortList(Port* head){
 	printf("~~~~~~~~~~~[ "CYAN"Cars in ports"WHITE" ]~~~~~~~~~~~\n");
 	while (head) {
-		if (head->p2car) {
+		if (head->p2car) { // Only print ports with a car assigned
 			printf("car license: %s | ", head->p2car->nLicense);
 			printf("Port type: ");
 			switch (head->p2car->portType) {

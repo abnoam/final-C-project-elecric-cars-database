@@ -15,43 +15,43 @@
 CarBST* initCarBST(){
 	CarBST* bst = (CarBST*)malloc(sizeof(CarBST));
 	if (!bst) { displayError(300); return NULL; }
-	bst->root = NULL;
+	bst->root = NULL;	// Initialize root pointer to NULL (empty tree)
 	return bst;
 }
 
 tCar* createTCar(Car* car) {
 	tCar* node = (tCar*)malloc(sizeof(tCar));
 	if (!node) { displayError(300); return NULL; }
-	node->car = car;
+	node->car = car;	// Store pointer to Car in this node
 	node->left = NULL;
 	node->right = NULL;
 	return node;
 }
 tCar* insertTCar(tCar* root, tCar* newNode) {
 	if (root == NULL)
-		return newNode;
+		return newNode;	// Insert here if reached leaf
 	int newData = atoi(newNode->car->nLicense);
 	int rootData = atoi(root->car->nLicense);
-	if (newData <= rootData) //left subtree (<=)
-			root->left = insertTCar(root->left, newNode);
-	else //right subtree (>)
-			root->right = insertTCar(root->right, newNode);
+	if (newData <= rootData) // If new license is smaller or equal
+			root->left = insertTCar(root->left, newNode);	// Insert to left subtree
+	else 
+			root->right = insertTCar(root->right, newNode);	// Insert to right subtree
 	return root;
 }
 
 Car* searchCar(tCar* root, char nLicense[9]){
 	if (root == NULL)
-		return NULL;
+		return NULL;	// Not found
 	if(*nLicense == '\0')
-		return NULL;
+		return NULL;	// Empty license string, invalid input
 	int rootData = atoi(root->car->nLicense);
 	int nLic = atoi(nLicense);
 	if (nLic == rootData)
-		return root->car;
+		return root->car;	// Found matching car
 	if (nLic < rootData)
-		return searchCar(root->left, nLicense);
+		return searchCar(root->left, nLicense);	// Search left subtree
 	else
-		return searchCar(root->right, nLicense);
+		return searchCar(root->right, nLicense);	// Search right subtree
 }
 
 
@@ -59,24 +59,20 @@ void chargeCar(StationBST** stationBST, CarBST* carBST) {
 	char stationName[MAX_NAME_LEN];
 	StationBST* sBST = *stationBST;
 	if(!sBST->root){
-		printf("No stations!\n");
+		printf("No stations!\n");	// No stations to charge at
 		return;
 	}
 	char carLicense[9],checkInput;
-	int digitCount = 0, licBool=1, inputType, pt, choiceInput, ID;
+	int digitCount = 0, inputType, pt, choiceInput, ID;
 	Station* station;
 	Port* port;
-	while (licBool) {
-		carLicenseInput(carLicense);
-		if(strcmp(carLicense,"\0") != 0){
-			licBool = 0;
-		}
-	}
-	licBool = 1;
-	Car* car = searchCar(carBST->root,carLicense);
+	 do{
+		carLicenseInput(carLicense);	// Get license input from user
+	} while (strcmp(carLicense, "\0") == 0);	// Repeat until non-empty input
+	Car* car = searchCar(carBST->root,carLicense);	// Search for car in BST
 	if (!car)
 	{
-		while (licBool) {
+		do {
 			printf("Enter car's port type(FAST[0],MID[1],SLOW[2]): ");
 			if (scanf("%d%c", &pt, &checkInput) != 2 || checkInput != '\n') { //checks if users enterd an integer and nothing else {if(scanf scanned amount of values other than 2 || the second value scanned is not an enter)}
 				displayError(101);
@@ -86,44 +82,50 @@ void chargeCar(StationBST** stationBST, CarBST* carBST) {
 				displayError(200);
 			}
 			else{
-				licBool = 0;
 				switch (pt)
 				{
 				case 0:
-					car = createCar(carLicense, FAST, 0, NULL, 0);
+					car = createCar(carLicense, FAST, 0, NULL, 0);	// Create FAST type car
 					break;
 				case 1:
-					car = createCar(carLicense, MID, 0, NULL, 0);
+					car = createCar(carLicense, MID, 0, NULL, 0);	// Create MID type car
 					break;
 				case 2:
-					car = createCar(carLicense, SLOW, 0, NULL, 0);
+					car = createCar(carLicense, SLOW, 0, NULL, 0);	// Create SLOW type car
 					break;
 				default:
 					break;
 				}
-				tCar* tcar = createTCar(car);
-				carBST->root = insertTCar(carBST->root, tcar);
+				tCar* tcar = createTCar(car);	// insert car into tree node
+				carBST->root = insertTCar(carBST->root, tcar);	// Insert into BST
 			}
-		}
+		} while (!car);
 	}
-	licBool = 1;
 	do{
-		station = stationInput(sBST);
+		station = stationInput(sBST);	// Ask user for station selection
 	} while (!station);
-	port = searchAvailbleByPT(station->portsList,car->portType);
-	if(!car->pPort){
+	port = searchAvailbleByPT(station->portsList,car->portType);	// Find available port by type	
+	if (isCarInStation(station, car->nLicense)) {
+		printf("Car is already in this station\n");
+	}
+	else if(!car->pPort){	// Car is not currently charging
+		Station* oldSt = findStation(sBST->root, car->nLicense);	// Check if car is in another station
+			if(oldSt){
+				oldSt->nCars--;	// Reduce car count in old station
+				removeCarFromQueue(oldSt->carQueue, car);	// Remove from old queue
+			}
 		if(port) {
-			assignCar2port(car, port);
+			assignCar2port(car, port);	// Assign to free port
 		}
 		else {
-			enqueueCar(station->carQueue, car);
+			enqueueCar(station->carQueue, car);	// Add to station queue
 			car->inqueue = 1;
 			station->nCars++;
 			printf("ports are occupid added to queue\n");
 		}
 	}
 	else{
-		station = findStation(sBST->root, car->nLicense);
+		station = findStation(sBST->root, car->nLicense);	// Find station where car is charging
 		printf("Car is already charging in %s station\n",station->name);
 	}
 }
@@ -131,24 +133,24 @@ void chargeCar(StationBST** stationBST, CarBST* carBST) {
 void checkCarStatus(StationBST* stationBST, CarBST* carBST) {
 	char carLicense[9];
 	int carsInFront;
-	carLicenseInput(carLicense);
+	carLicenseInput(carLicense);	// Get car license from user
 	if (strcmp(carLicense, "\0") == 0) {
 		return;
 	}
-	Car* car = searchCar(carBST->root, carLicense);
+	Car* car = searchCar(carBST->root, carLicense);	// Search for car
 	if(!car){
 		displayError(404);
 		return;
 	}
-	Station* station = findStation(stationBST->root, car->nLicense);
+	Station* station = findStation(stationBST->root, car->nLicense);	// Locate station
 	if (station) {
-		if (!car->inqueue) {
+		if (!car->inqueue) {	// Car is charging
 			printf("----- Info -----\n");
 			printf("Station Name: %s\n", station->name);
 			printf("Port number: %d\n", car->pPort->num);
 			printf("Charge time: %d[Min]\n", minutesBetween(car->pPort->tin));
 		}
-		else{
+		else{	// Car is in queue
 			printf("----- Info -----\n");
 			printf("Station Name: %s\n", station->name);
 			printf("Cars in front of the line: %d\n", CarsInFront(station->carQueue,car));
@@ -169,33 +171,33 @@ void stopCharge(StationBST* sBST, CarBST* cBST){
 	if (strcmp(carLicense, "\0") == 0) {
 		return;
 	}
-	Car* car = searchCar(cBST->root, carLicense);
+	Car* car = searchCar(cBST->root, carLicense);	// Search for car
 	if(!car){
 		displayError(404);
 		return;
 	}
 	Station* station = findStation(sBST->root, car->nLicense);
 	Port* port = car->pPort;
-	if(port){
-		car->pPort = NULL;
-		car->totalPayed += minutesBetween(port->tin) * 1.2;
-		port->tin.Min = 0;
+	if(port){	// Car is currently charging
+		car->pPort = NULL;	// Unassign port from car
+		car->totalPayed += minutesBetween(port->tin) * 1.2;	// Add payment
+		port->tin.Min = 0;	// Reset time
 		port->tin.Hour = 0;
 		port->tin.Day = 0;
 		port->tin.Month = 0;
 		port->tin.Year = 0;
 		port->p2car = NULL;
-		port->status = 2;
+		port->status = 2;	// Set port to free
 		printf("The car %s is removed from charger\n", car->nLicense);
 	}
 	else{
 		printf("Car is not charging\n");
 		return;
 	}
-	car = searchCarByPortType(station->carQueue, port->portType);
+	car = searchCarByPortType(station->carQueue, port->portType);	// Get next car in queue of same type
 	if(car){
-		assignCar2port(car, port);
-		removeCarFromQueue(station->carQueue, car);
+		assignCar2port(car, port);	// Assign new car to port
+		removeCarFromQueue(station->carQueue, car);	// Remove from queue
 		station->nCars--;
 		return;
 	}
@@ -203,9 +205,9 @@ void stopCharge(StationBST* sBST, CarBST* cBST){
 
 void dispTopCustomers(CarBST* cBST) {
 	if (cBST->root) {
-		Car* carList[5] = { NULL };
-		findTopCustumers(cBST->root, carList);
-		printTopCustumer(carList);
+		Car* carList[5] = { NULL };	// Array for top 5 customers
+		findTopCustumers(cBST->root, carList);	// Fill list
+		printTopCustumer(carList);	// Print results
 	}
 	else{
 		printf("No customers\n");
@@ -219,7 +221,7 @@ void findTopCustumers(tCar* root,Car* carList[5]) {
 	for (int i = 0; i < 5; i++)
 	{
 		if (carList[i] == NULL || root->car->totalPayed > carList[i]->totalPayed) {
-			for (int j = 4; j > i; j--) {	// move every element in list 1 place forward
+			for (int j = 4; j > i; j--) {	// move every element in list 1 place forward to make space
 				carList[j] = carList[j - 1];
 			}
 			carList[i] = root->car;
@@ -241,7 +243,7 @@ void printTopCustumer(Car* carList[5]) {
 
 tCar* findMinTcar(tCar* node) {
 	while (node && node->left)
-		node = node->left;
+		node = node->left;	// Move to leftmost node
 	return node;
 }
 
@@ -258,8 +260,8 @@ tCar* removeCar(tCar* root, char nLicense[9]) {
 	else if (nLic > rootData) {
 		root->right = removeCar(root->right, nLicense);
 	}
-	else {
-		if (root->left == NULL) {
+	else {	// Found node to delete
+		if (root->left == NULL) {	// One or zero children
 			tCar* temp = root->right;
 			free(root);
 			return temp;
@@ -270,7 +272,7 @@ tCar* removeCar(tCar* root, char nLicense[9]) {
 			return temp;
 		}
 
-		tCar* temp = findMinTcar(root->right);
+		tCar* temp = findMinTcar(root->right);	// Find successor
 		root->car = temp->car;
 		root->right = removeCar(root->right, temp->car->nLicense);
 	}
@@ -288,16 +290,16 @@ void remCustomer(CarBST* cBST){
 		displayError(404);
 		return;
 	}
-	if(car->inqueue == 1){
+	if(car->inqueue){	// Car is in queue
 		printf("Car is in queue\nCannot be removed\n");
 		return;
 	}
-	else if(car->pPort){
+	else if(car->pPort){	// Car is charging
 		printf("Car is charging\nCannot be removed\n");
 		return;
 	}
 	else{
-		cBST->root = removeCar(cBST->root, car->nLicense);
+		cBST->root = removeCar(cBST->root, car->nLicense);	// Remove from tree
 		printf("Customer is removed\n");
 	}
 }
@@ -307,14 +309,8 @@ void freeAllCar(tCar* root) {
 	if (!root) {
 		return;
 	}
-	freeAllCar(root->left);
-	freeAllCar(root->right);
-	free(root->car);
-	free(root);
+	freeAllCar(root->left);	// Free left subtree
+	freeAllCar(root->right);	// Free right subtree
+	free(root->car);	// Free car struct
+	free(root);	// Free node
 }
-
-
-
-
-
-

@@ -12,6 +12,7 @@
 Port* createPort(int num, PortType portType, int status, Car* p2car,Date date) {
 	Port* port = (Port*)malloc(sizeof(Port));
 	if (!port) { displayError(300); return NULL; }
+	// Initialize port fields with given parameters
 	port->num = num;
 	port->portType = portType;
 	port->status = status;
@@ -22,45 +23,46 @@ Port* createPort(int num, PortType portType, int status, Car* p2car,Date date) {
 }
 
 void addPort(Port* head, Port* newPort){
-	while (head->next)
-	{
+	while (head->next) {// Traverse until last port in linked list
 		head = head->next;
 	}
-	head->next = newPort;
+	head->next = newPort; // Append new port
 }
 
 void removePort(Port* head, int num) {
 	Port* prev = head;
 	Port* curr = head->next;
 	Port* newTemp;
-	if (head == NULL)
+	if (!head) {
 		return;
-	if (head->num == num) {
+	}
+	if (head->num == num) { // If the port to remove is the head node
 		Port* temp = head;
 		head = head->next;
 		free(temp);
 		newTemp = head;
 	}
-	else {
-		while (curr != NULL && curr->num != num) {
+	else { // Search for port with matching number
+		while (curr  && curr->num != num) {
 			prev = curr;
 			curr = curr->next;
 		}
-		if (curr == NULL) {
-			return;
+		if (!curr) {
+			return; // Not found
 		}
+		// Remove the node and fix linkage
 		prev->next = curr->next;
 		free(curr);
 		newTemp = prev->next;
 	}
-	while(newTemp){
+	while(newTemp){  // Re-number all ports after removed one
 		newTemp->num--;
 		newTemp = newTemp->next;
 	}
 }
 
 Port* searchAvailbleByPT(Port* head, PortType portType) {
-	while(head){
+	while(head){  // Look for first free port matching the requested type
 		if(head->portType == portType && head->status == 2){
 			return head;
 		}
@@ -86,6 +88,7 @@ int minutesBetween(Date inputDate) {
 
 void printPort(Port* port){
 	printf("~~~~~~~~~~~~~~~~~[ "GREEN"Port #%d"WHITE" ]~~~~~~~~~~~~~~~~~\n", port->num);
+	// Print port type
 	printf("Port Type    : ");
 	switch (port->portType) {
 	case SLOW:
@@ -100,6 +103,7 @@ void printPort(Port* port){
 	default:
 		break;
 	}
+	// Print port status
 	printf("Status       : ");
 	switch (port->status) {
 	case 1:
@@ -114,6 +118,7 @@ void printPort(Port* port){
 	default:
 		break;
 	}
+	// Print car info if port is occupied
 	if (port->p2car) {
 		printf("Car in Port  : ");
 		printCarLic(port->p2car);
@@ -128,7 +133,7 @@ void printPorts(Port* head){
 		printf("No ports!\n");
 		return;
 	}
-	while (head) {
+	while (head) { // Print each port and count active charging cars
 		printPort(head);
 		if (head->p2car) {
 			countCarsInCharge++;

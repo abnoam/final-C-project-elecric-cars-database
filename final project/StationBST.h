@@ -66,11 +66,11 @@ Station* searchStation(Station* root, void* value, int type);
 // (StationBST* bst)
 void locNearSt(StationBST* bst);
 
-// Checks if a car with given license is currently connected
-// to a port in the given port list
+// Checks if a car with given license is currently 
+// in a station
 // Returns 1 if found, 0 otherwise
-// (Port* head, char lic[9])
-int isCarInStationPort(Port* head, char lic[9]);
+// (Station* station, char lic[9])
+int isCarInStation(Station* station, char lic[9]);
 
 // Prints the details of all stations in the BST
 // (Station* root)
