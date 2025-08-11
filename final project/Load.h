@@ -5,8 +5,8 @@
 
 // Loads all system data from text files into memory
 // Loads stations, cars, ports, and the line of cars queue
-// (CarBST* carBST, StationBST* stationBST)
-void loadFiles(CarBST* carBST, StationBST* stationBST);
+// (CarBST** carBST, StationBST** stationBST)
+void loadFiles(CarBST** carBST, StationBST** stationBST);
 
 // Loads all cars from the cars file into the CarBST
 // Also assigns them to the appropriate station if relevant

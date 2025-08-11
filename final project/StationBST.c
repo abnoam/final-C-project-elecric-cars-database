@@ -17,7 +17,7 @@ typedef Station*(*Search)(Station* root, void* value);
 
 StationBST* initStationBST(){
 	StationBST* bst = (StationBST*)malloc(sizeof(StationBST));
-	if (!bst) { displayError(300); return; }
+	if (!bst) { displayError(300); return NULL; }
 	bst->root = NULL;	// Initialize root to NULL
 	return bst;	// Return pointer to new BST
 }

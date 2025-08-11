@@ -47,8 +47,8 @@ StationBST* initStationBST();
 
 // Creates a new station
 // Returns a pointer to the new station
-// (int id, char* name, int nPorts, int x, int y, int nCars)
-Station* createStation(int id, char* name, int nPorts, int x, int y, int nCars);
+// (int id, char* name, int nPorts, double* x, double* y, int nCars)
+Station* createStation(int id, char* name, int nPorts, double* x, double* y, int nCars);
 
 // Inserts a new station node into the binary search tree (by ID)
 // Returns the updated root of the tree

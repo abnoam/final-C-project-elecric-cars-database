@@ -58,6 +58,9 @@ Car* dequeue(qCar* q) {
 	Car* car = q->front->car;      // Save the car to return
 	carNode* node2Del = q->front;
 	q->front = q->front->next;     // Move front pointer forward
+	if (q->front == NULL) {
+		q->rear = NULL;		// If queue is now empty, update rear pointer
+	}
 	free(node2Del);                // Free old front node
 	return car;
 }
@@ -204,8 +207,8 @@ void printCarsInPortList(Port* head){
 			printf("Time in charge: %d[Min]\n", minutesBetween(head->tin));
 			printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 		}
-		
-		head = head->next;
+	
+		head = head->next;	// Move to the next port in the list
 	}
 }
 
