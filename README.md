@@ -178,20 +178,6 @@ Option: _
 - Proper deallocation on system exit
 - Prevention of memory leaks through structured cleanup
 
-## Future Enhancement Possibilities
-- Real-time GPS integration
-- Mobile app interface
-- Battery percentage tracking
-- Reservation system
-- Dynamic pricing based on demand
-- Multiple vehicle ownership support
-
 ## Author
+noam abutbul & yosif stolovitski
 Created as a final C project for electric vehicle infrastructure management.
-
-## License
-Open source project
-
----
-
-**Last Updated**: August 2025
