@@ -1,4 +1,4 @@
-#Electric Cars Database Management System
+## Electric Cars Database Management System
 
 A C-based management system for electric vehicle charging stations.
 
@@ -15,47 +15,6 @@ This project simulates a real-world EV charging infrastructure using data struct
 - Charging status and payment tracking
 - Station statistics and top customer reports
 - File-based data persistence
-
----
-
-## 🛠️ Technologies
-
-- C
-- Binary Search Trees (BST)
-- Queues
-- Dynamic Memory Allocation
-- File I/O
-- Modular Programming
-
----
-
-## 📂 Project Structure
-
-```bash
-├── main.c
-├── menu.c
-├── Car.c/h
-├── CarBST.c/h
-├── Station.c/h
-├── StationBST.c/h
-├── Port.c/h
-├── Load.c/h
-└── displayError.c/h
-```
-
----
-
-## ⚙️ Compilation
-
-### GCC
-
-```bash
-gcc -o electric_cars_db *.c -lm
-./electric_cars_db
-```
-
-### Visual Studio
-Open the `.sln` file and run the project.
 
 ---
 
@@ -87,6 +46,33 @@ Open the `.sln` file and run the project.
     </td>
   </tr>
 </table>
+
+---
+
+## 🛠️ Technologies
+
+- C
+- Binary Search Trees (BST)
+- Queues
+- Dynamic Memory Allocation
+- File I/O
+- Modular Programming
+
+---
+
+## 📂 Project Structure
+
+```bash
+├── main.c
+├── menu.c
+├── Car.c/h
+├── CarBST.c/h
+├── Station.c/h
+├── StationBST.c/h
+├── Port.c/h
+├── Load.c/h
+└── displayError.c/h
+```
 
 ---
 
